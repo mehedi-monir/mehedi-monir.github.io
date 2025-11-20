@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monthly Planner</title>
+    <title>Study Planner</title>
     <style>
+        /* Base styles and variables */
         * {
             margin: 0;
             padding: 0;
@@ -14,21 +15,22 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
+            padding: 15px;
             min-height: 100vh;
             overflow-x: hidden;
+            color: #374151;
         }
 
         .container {
-            max-width: 830px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         h1 {
             text-align: center;
             color: white;
-            font-size: 3rem;
-            margin-bottom: 40px;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             animation: fadeIn 0.6s ease-in;
         }
@@ -38,18 +40,25 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Month Grid View */
+        /* Month Grid View (Responsive) */
         .months-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
             gap: 20px;
             animation: fadeIn 0.8s ease-in;
+        }
+
+        @media (max-width: 768px) {
+            .months-grid {
+                grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+                gap: 15px;
+            }
         }
 
         .month-card-preview {
             background: white;
             border-radius: 20px;
-            padding: 20px 20px;
+            padding: 25px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -74,27 +83,12 @@
         }
 
         .month-icon {
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
             margin-bottom: 15px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .month-card-preview:hover .month-icon {
-            animation: spin 0.6s ease-in-out;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .month-preview-name {
-            font-size: 1.8rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
             font-weight: bold;
             margin-bottom: 8px;
             color: var(--month-color);
@@ -119,7 +113,7 @@
         }
 
         .stat-number {
-            font-size: 1.5rem;
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
             font-weight: bold;
             color: var(--month-color);
         }
@@ -131,7 +125,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* Detail View */
+        /* Detail View Styles */
         .detail-view {
             display: none;
             animation: slideIn 0.5s ease-out;
@@ -171,19 +165,19 @@
         .detail-card {
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: clamp(20px, 5vw, 40px);
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
         .detail-header {
             text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 25px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
             border-bottom: 4px solid var(--month-color);
         }
 
         .detail-month-name {
-            font-size: 3rem;
+            font-size: clamp(2rem, 6vw, 3rem);
             font-weight: bold;
             color: var(--month-color);
             margin-bottom: 8px;
@@ -194,8 +188,9 @@
             font-size: 1.1rem;
         }
 
+        /* Priority Sections */
         .priority-section {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             padding: 20px;
             border-radius: 16px;
             background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
@@ -220,13 +215,14 @@
             gap: 12px;
             margin-bottom: 20px;
             font-weight: 600;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            flex-wrap: wrap;
         }
 
         .priority-badge {
             padding: 6px 16px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -247,9 +243,10 @@
             color: #1e40af;
         }
 
+        /* Task List */
         .task-list {
             list-style: none;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .task-item {
@@ -265,7 +262,6 @@
         }
 
         .task-item:hover {
-            transform: translateX(5px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
@@ -279,8 +275,9 @@
 
         .task-text {
             flex: 1;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
             color: #374151;
+            word-break: break-word;
         }
 
         .task-text.completed {
@@ -288,6 +285,51 @@
             color: #9ca3af;
         }
 
+        .task-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .task-action-btn {
+            background: #f3f4f6;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1; /* Fixes vertical alignment for emojis/icons */
+        }
+
+        .task-action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .task-action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .edit-btn {
+            color: #3b82f6;
+        }
+
+        .edit-btn:hover {
+            background: #dbeafe;
+        }
+
+        .delete-btn {
+            color: #ef4444;
+        }
+
+        .delete-btn:hover {
+            background: #fee2e2;
+        }
+
+        /* Progress Bars */
         .priority-progress {
             margin-top: 15px;
         }
@@ -296,7 +338,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
             color: #6b7280;
             font-weight: 600;
         }
@@ -322,20 +364,12 @@
             font-weight: bold;
         }
 
-        .high .progress-bar {
-            background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
-        }
-
-        .medium .progress-bar {
-            background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
-        }
-
-        .low .progress-bar {
-            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
-        }
+        .high .progress-bar { background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%); }
+        .medium .progress-bar { background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); }
+        .low .progress-bar { background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%); }
 
         .overall-progress-section {
-            margin-top: 40px;
+            margin-top: 30px;
             padding: 25px;
             background: linear-gradient(135deg, var(--month-color-light) 0%, var(--month-color-lighter) 100%);
             border-radius: 16px;
@@ -346,7 +380,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 12px;
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 3vw, 1.1rem);
             color: #374151;
             font-weight: 700;
         }
@@ -373,6 +407,7 @@
             font-weight: bold;
         }
 
+        /* Add Task Button & Empty State */
         .add-task-btn {
             width: 100%;
             padding: 12px;
@@ -382,7 +417,7 @@
             border-radius: 12px;
             color: #6b7280;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: clamp(0.85rem, 2.5vw, 0.9rem);
             font-weight: 600;
             transition: all 0.3s ease;
         }
@@ -393,7 +428,40 @@
             background: var(--month-color-lighter);
         }
 
-        /* Month specific colors */
+        .add-task-btn:active {
+            transform: scale(0.98);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #9ca3af;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        /* Save indicator */
+        .save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Month specific colors - DO NOT CHANGE */
         .january { --month-color: #3b82f6; --month-color-dark: #2563eb; --month-color-light: #dbeafe; --month-color-lighter: #eff6ff; }
         .february { --month-color: #ec4899; --month-color-dark: #db2777; --month-color-light: #fce7f3; --month-color-lighter: #fdf2f8; }
         .march { --month-color: #10b981; --month-color-dark: #059669; --month-color-light: #d1fae5; --month-color-lighter: #ecfdf5; }
@@ -410,16 +478,45 @@
         .hidden {
             display: none;
         }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .detail-card {
+                padding: 20px;
+            }
+
+            .priority-section {
+                padding: 15px;
+            }
+
+            .back-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .task-actions {
+                gap: 5px;
+            }
+
+            .task-action-btn {
+                padding: 5px 8px;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="save-indicator" id="saveIndicator">✓ Saved</div>
+    
     <div class="container">
-        <h1>📅 2025 Monthly Planner</h1>
+        <h1>📚 Study Planner 2025</h1>
         
-        <!-- Month Grid View -->
         <div class="months-grid" id="monthsGrid"></div>
         
-        <!-- Detail View -->
         <div class="detail-view" id="detailView"></div>
     </div>
 
@@ -439,32 +536,72 @@
             { name: 'December', class: 'december', icon: '🎄' }
         ];
 
-        const taskData = {};
+        let taskData = {};
 
+        // --- Data Handling (localStorage) ---
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('studyPlannerData');
+            if (saved) {
+                try {
+                    taskData = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Error loading data:', e);
+                    initializeTaskData();
+                }
+            } else {
+                initializeTaskData();
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            try {
+                localStorage.setItem('studyPlannerData', JSON.stringify(taskData));
+                showSaveIndicator();
+            } catch (e) {
+                console.error('Error saving data:', e);
+            }
+        }
+
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // Initialize with empty arrays if no data is found
         function initializeTaskData() {
             months.forEach(month => {
                 if (!taskData[month.name]) {
                     taskData[month.name] = {
-                        high: ['Task 1', 'Task 2'],
-                        medium: ['Task 1', 'Task 2', 'Task 3'],
-                        low: ['Task 1', 'Task 2']
+                        high: [],
+                        medium: [],
+                        low: []
                     };
                 }
             });
+            saveData();
         }
+
+        // --- Calculation Functions ---
 
         function getTotalTasks(monthName) {
             const tasks = taskData[monthName];
+            if (!tasks) return 0;
             return tasks.high.length + tasks.medium.length + tasks.low.length;
         }
 
         function getCompletedTasks(monthName) {
             const tasks = taskData[monthName];
+            if (!tasks) return 0;
             let completed = 0;
             ['high', 'medium', 'low'].forEach(priority => {
-                tasks[priority].forEach((task, index) => {
-                    const checkbox = document.querySelector(`#${monthName}-${priority}-${index}`);
-                    if (checkbox && checkbox.checked) {
+                tasks[priority].forEach((task) => {
+                    if (task.completed) {
                         completed++;
                     }
                 });
@@ -474,14 +611,9 @@
 
         function calculatePriorityProgress(monthName, priority) {
             const tasks = taskData[monthName][priority];
-            let completed = 0;
-            tasks.forEach((task, index) => {
-                const checkbox = document.querySelector(`#${monthName}-${priority}-${index}`);
-                if (checkbox && checkbox.checked) {
-                    completed++;
-                }
-            });
-            return tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
+            if (tasks.length === 0) return 0;
+            const completed = tasks.filter(task => task.completed).length;
+            return Math.round((completed / tasks.length) * 100);
         }
 
         function calculateOverallProgress(monthName) {
@@ -489,24 +621,8 @@
             const completed = getCompletedTasks(monthName);
             return total > 0 ? Math.round((completed / total) * 100) : 0;
         }
-
-        function showMonthDetail(monthName) {
-            document.getElementById('monthsGrid').classList.add('hidden');
-            const detailView = document.getElementById('detailView');
-            detailView.innerHTML = createDetailView(monthName);
-            detailView.classList.add('active');
-            
-            ['high', 'medium', 'low'].forEach(priority => {
-                updateProgress(monthName, priority);
-            });
-        }
-
-        function showMonthGrid() {
-            document.getElementById('monthsGrid').classList.remove('hidden');
-            const detailView = document.getElementById('detailView');
-            detailView.classList.remove('active');
-            detailView.innerHTML = '';
-        }
+        
+        // --- UI Rendering Functions ---
 
         function updateProgress(monthName, priority) {
             const progress = calculatePriorityProgress(monthName, priority);
@@ -537,19 +653,13 @@
             }
         }
 
-        function toggleTask(monthName, priority, index, checkbox) {
-            const taskText = checkbox.nextElementSibling;
-            if (checkbox.checked) {
-                taskText.classList.add('completed');
-            } else {
-                taskText.classList.remove('completed');
-            }
-            updateProgress(monthName, priority);
+        function renderMonths() {
+            const grid = document.getElementById('monthsGrid');
+            grid.innerHTML = months.map(month => createMonthPreview(month)).join('');
         }
 
         function createMonthPreview(month) {
             const totalTasks = getTotalTasks(month.name);
-            const completedTasks = getCompletedTasks(month.name);
             const progress = calculateOverallProgress(month.name);
             
             return `
@@ -570,10 +680,34 @@
                 </div>
             `;
         }
+        
+        function createTaskListHTML(monthName, priority) {
+            const tasks = taskData[monthName][priority];
+            if (tasks.length === 0) {
+                return `<div class="empty-state">No tasks yet. Click below to add a ${priority} priority task!</div>`;
+            }
+
+            return `
+                <ul class="task-list">
+                    ${tasks.map((task, i) => `
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="${monthName}-${priority}-${i}" 
+                                ${task.completed ? 'checked' : ''}
+                                onchange="toggleTask('${monthName}', '${priority}', ${i})">
+                            <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
+                            <div class="task-actions">
+                                <button class="task-action-btn edit-btn" onclick="editTask('${monthName}', '${priority}', ${i})" title="Edit">✏️</button>
+                                <button class="task-action-btn delete-btn" onclick="deleteTask('${monthName}', '${priority}', ${i})" title="Delete">🗑️</button>
+                            </div>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+
 
         function createDetailView(monthName) {
             const month = months.find(m => m.name === monthName);
-            const tasks = taskData[monthName];
             
             return `
                 <button class="back-button" onclick="showMonthGrid()">
@@ -581,7 +715,7 @@
                 </button>
                 <div class="detail-card ${month.class}">
                     <div class="detail-header">
-                        <div class="month-icon" style="font-size: 4rem;">${month.icon}</div>
+                        <div class="month-icon" style="font-size: clamp(3rem, 10vw, 4rem);">${month.icon}</div>
                         <div class="detail-month-name">${monthName}</div>
                         <div class="detail-month-year">2025</div>
                     </div>
@@ -589,82 +723,64 @@
                     <div class="priority-section high">
                         <div class="priority-header">
                             <span class="priority-badge">High</span>
-                            Priority
+                            High Priority Tasks
                         </div>
-                        <ul class="task-list">
-                            ${tasks.high.map((task, i) => `
-                                <li class="task-item">
-                                    <input type="checkbox" class="task-checkbox" id="${monthName}-high-${i}" 
-                                           onchange="toggleTask('${monthName}', 'high', ${i}, this)">
-                                    <span class="task-text">${task}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
+                        ${createTaskListHTML(monthName, 'high')}
                         <button class="add-task-btn" onclick="addTask('${monthName}', 'high')">+ Add High Priority Task</button>
                         
+                        ${taskData[monthName]['high'].length > 0 ? `
                         <div class="priority-progress">
                             <div class="progress-label">
-                                <span>High Priority Progress</span>
+                                <span>Progress</span>
                                 <span id="progress-text-${monthName}-high">0%</span>
                             </div>
                             <div class="progress-bar-container">
                                 <div class="progress-bar" id="progress-${monthName}-high" style="width: 0%">0%</div>
                             </div>
                         </div>
+                        ` : ''}
                     </div>
 
                     <div class="priority-section medium">
                         <div class="priority-header">
                             <span class="priority-badge">Medium</span>
-                            Priority
+                            Medium Priority Tasks
                         </div>
-                        <ul class="task-list">
-                            ${tasks.medium.map((task, i) => `
-                                <li class="task-item">
-                                    <input type="checkbox" class="task-checkbox" id="${monthName}-medium-${i}" 
-                                           onchange="toggleTask('${monthName}', 'medium', ${i}, this)">
-                                    <span class="task-text">${task}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
+                        ${createTaskListHTML(monthName, 'medium')}
                         <button class="add-task-btn" onclick="addTask('${monthName}', 'medium')">+ Add Medium Priority Task</button>
                         
+                        ${taskData[monthName]['medium'].length > 0 ? `
                         <div class="priority-progress">
                             <div class="progress-label">
-                                <span>Medium Priority Progress</span>
+                                <span>Progress</span>
                                 <span id="progress-text-${monthName}-medium">0%</span>
                             </div>
                             <div class="progress-bar-container">
                                 <div class="progress-bar" id="progress-${monthName}-medium" style="width: 0%">0%</div>
                             </div>
                         </div>
+                        ` : ''}
                     </div>
 
                     <div class="priority-section low">
                         <div class="priority-header">
                             <span class="priority-badge">Low</span>
-                            Priority
+                            Low Priority Tasks
                         </div>
-                        <ul class="task-list">
-                            ${tasks.low.map((task, i) => `
-                                <li class="task-item">
-                                    <input type="checkbox" class="task-checkbox" id="${monthName}-low-${i}" 
-                                           onchange="toggleTask('${monthName}', 'low', ${i}, this)">
-                                    <span class="task-text">${task}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
+                        ${createTaskListHTML(monthName, 'low')}
                         <button class="add-task-btn" onclick="addTask('${monthName}', 'low')">+ Add Low Priority Task</button>
                         
+                        ${taskData[monthName]['low'].length > 0 ? `
                         <div class="priority-progress">
                             <div class="progress-label">
-                                <span>Low Priority Progress</span>
+                                <span>Progress</span>
                                 <span id="progress-text-${monthName}-low">0%</span>
                             </div>
                             <div class="progress-bar-container">
                                 <div class="progress-bar" id="progress-${monthName}-low" style="width: 0%">0%</div>
                             </div>
                         </div>
+                        ` : ''}
                     </div>
 
                     <div class="overall-progress-section">
@@ -680,20 +796,76 @@
             `;
         }
 
+        function showMonthDetail(monthName) {
+            document.getElementById('monthsGrid').classList.add('hidden');
+            const detailView = document.getElementById('detailView');
+            detailView.innerHTML = createDetailView(monthName);
+            detailView.classList.add('active');
+            
+            // Initial progress update for the detail view
+            ['high', 'medium', 'low'].forEach(priority => {
+                updateProgress(monthName, priority);
+            });
+        }
+
+        function showMonthGrid() {
+            document.getElementById('monthsGrid').classList.remove('hidden');
+            const detailView = document.getElementById('detailView');
+            detailView.classList.remove('active');
+            detailView.innerHTML = '';
+            renderMonths(); // Refresh the grid to show updated stats
+        }
+        
+        // --- Task Management Functions ---
+
+        function toggleTask(monthName, priority, index) {
+            taskData[monthName][priority][index].completed = !taskData[monthName][priority][index].completed;
+            saveData();
+            
+            const checkbox = document.querySelector(`#${monthName}-${priority}-${index}`);
+            const taskText = checkbox.nextElementSibling;
+            
+            if (taskData[monthName][priority][index].completed) {
+                taskText.classList.add('completed');
+            } else {
+                taskText.classList.remove('completed');
+            }
+            
+            updateProgress(monthName, priority);
+        }
+        
         function addTask(monthName, priority) {
             const taskName = prompt(`Enter new ${priority} priority task for ${monthName}:`);
             if (taskName && taskName.trim()) {
-                taskData[monthName][priority].push(taskName.trim());
-                showMonthDetail(monthName);
+                taskData[monthName][priority].push({ text: taskName.trim(), completed: false });
+                saveData();
+                showMonthDetail(monthName); // Re-render to show new task
+            }
+        }
+        
+        function editTask(monthName, priority, index) {
+            const currentText = taskData[monthName][priority][index].text;
+            const newText = prompt(`Edit ${priority} priority task for ${monthName}:`, currentText);
+            
+            if (newText !== null && newText.trim() !== "") {
+                taskData[monthName][priority][index].text = newText.trim();
+                saveData();
+                showMonthDetail(monthName); // Re-render to show updated task
+            }
+        }
+        
+        function deleteTask(monthName, priority, index) {
+            if (confirm(`Are you sure you want to delete the task: "${taskData[monthName][priority][index].text}"?`)) {
+                taskData[monthName][priority].splice(index, 1);
+                saveData();
+                showMonthDetail(monthName); // Re-render the detail view
             }
         }
 
-        function renderMonths() {
-            const grid = document.getElementById('monthsGrid');
-            grid.innerHTML = months.map(month => createMonthPreview(month)).join('');
-        }
+        // --- Initialization ---
 
-        initializeTaskData();
+        // Load data and render on page load
+        loadData();
         renderMonths();
     </script>
 </body>
